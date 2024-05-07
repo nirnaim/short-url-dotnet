@@ -10,7 +10,7 @@ namespace TinyUrlApi.Models
         public string? Id { get; set; }
 
         [BsonElement("ShortCode")]
-        public string ShortCode { get; set; } = null!;
+        public string ShortCode { get; set ; } = null!;
 
         [BsonElement("LongUrl")]
         public string LongUrl { get; set; } = null!;
