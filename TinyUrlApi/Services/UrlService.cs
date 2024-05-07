@@ -4,7 +4,6 @@ using MongoDB.Driver;
 using System.Collections.Concurrent;
 using System.Text;
 using System.Security.Cryptography;
-using System.Collections.Generic;
 
 namespace TinyUrlApi.Services
 {
@@ -15,7 +14,7 @@ namespace TinyUrlApi.Services
         private readonly ConcurrentDictionary<string, SemaphoreSlim> _locks;
         private readonly CacheService<string, UrlMapping> _cacheService;
 
-        public UrlService(IOptions<TinyUrlDatabaseSettings> tinyUrlDatabaseSettings, ILogger<UrlService> logger)
+        public UrlService(IOptions<TinyUrlDatabaseSettings> tinyUrlDatabaseSettings)
         {
             var mongoClient = new MongoClient(
             tinyUrlDatabaseSettings.Value.ConnectionString);

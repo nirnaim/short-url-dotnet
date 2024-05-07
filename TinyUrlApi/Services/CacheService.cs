@@ -4,11 +4,6 @@ namespace TinyUrlApi.Services
 {
     public class CacheService<TKey, TValue> where TKey : IEquatable<TKey>
     {
-        /*
-         * For a size-limited cache with concurrency and multi-threading support, along with collapsed requests, I'll implement a thread-safe LRU (Least Recently Used) cache.
-         * LRU is a popular cache eviction policy that removes the least recently used items when the cache reaches its maximum capacity. 
-         * This approach ensures that frequently accessed items stay in the cache while evicting less used items when the cache is full.
-        */
         private readonly int _capacity;
         private readonly ConcurrentDictionary<TKey, LinkedListNode<(TKey key, TValue value)>> _cacheMap;
         private readonly LinkedList<(TKey key, TValue value)> _cacheList;
@@ -53,19 +48,15 @@ namespace TinyUrlApi.Services
             {
                 if (_cacheMap.TryGetValue(key, out var node))
                 {
-                    // Update existing item
                     _cacheList.Remove(node);
                     _cacheList.AddFirst(node);
                     node.Value = (key, value);
                 }
                 else
                 {
-                    // Add new item
                     var newNode = _cacheList.AddFirst((key, value));
                     _cacheMap.TryAdd(key, newNode);
-
-                    // Check and remove least recently used item if capacity exceeded
-                    if (_cacheMap.Count > _capacity)
+                    if (_cacheList.Count > _capacity)
                     {
                         var lastNode = _cacheList.Last;
                         _cacheList.RemoveLast();
